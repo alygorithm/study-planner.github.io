@@ -1,76 +1,182 @@
-// Calendario
+/* ===========================
+   GENERALE PAGINA PLANNER
+=========================== */
+:host {
+  --ion-background-color: #f4f3f1;  /* Sfondo principale */
+  --ion-text-color: #344c3d;        /* Colore testo principale */
+}
+
+ion-content {
+  --ion-background-color: #f4f3f1;
+  background-color: var(--ion-background-color);
+  color: var(--ion-text-color);
+}
+
+/* ===========================
+   HEADER
+=========================== */
+ion-header ion-toolbar {
+  --background: #f2d1d4; /* Rosa pastello */
+  color: #344c3d;         /* Verde scuro per testo */
+}
+
+ion-header ion-title {
+  color: #344c3d; /* Assicura che il titolo sia leggibile */
+}
+
+/* ===========================
+   CALENDARIO
+=========================== */
 .calendar-container {
-    display: flex;
-    overflow-x: auto;
-    gap: 10px;
-    padding: 10px 0;
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px 0;
 }
 
 .day {
-    flex: 0 0 auto;
-    padding: 10px 15px;
-    border-radius: 10px;
-    background-color: #eee;
-    text-align: center;
-    min-width: 80px;
-    cursor: pointer;
-    white-space: nowrap;
+  flex: 0 0 auto;
+  padding: 10px 15px;
+  border-radius: 10px;
+  background-color: #f2d1d4; /* rosa pastello */
+  text-align: center;
+  min-width: 80px;
+  cursor: pointer;
+  white-space: nowrap;
+  color: #344c3d;
+  font-weight: 500;
+}
+
+.day:hover {
+    background-color: #d8959b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .day.today {
-    background-color: #3880ff;
-    color: white;
-    font-weight: bold;
+  background-color: #829672; /* verde pastello */
+  color: #fff;
+  font-weight: bold;
+}
+
+.day.today:hover {
+    background-color: #344c3d;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* ===========================
+   TASK LIST
+=========================== */
+.tasks-container {
+  margin-top: 20px;
+}
+
+.task-card {
+    background-color: #f2d1d4;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: trasform 0.1s ease-in-out;
+}
+
+.task-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+ion-list ion-item {
+  --background: #f4f3f1 !important; /* forza sfondo chiaro */
+  border-radius: 10px;
+  margin-bottom: 8px;
+  padding: 10px;
+  color: #344c3d;
+}
+
+ion-list ion-item h2 {
+  margin: 0;
+  font-size: 16px;
+  color: #344c3d;
+}
+
+ion-list ion-item p {
+  margin: 2px 0 0 0;
+  font-size: 14px;
+  color: #344c3d;
 }
 
 
 
-//Task
-.task-continer {
+
+/* ===========================
+   PULSANTE “AGGIUNGI TASK”
+=========================== */
+ion-button.add-task-btn {
+  --background: #d8959b; /* rosa pastello scuro */
+  color: #fff;
+  font-weight: bold;
+  
+}
+
+/* TASK LIST */
+.tasks-container {
     margin-top: 20px;
 }
 
-.add-task-container {
-    margin: 15px 0;
+ion-list {
+    background-color: transparent;
 }
 
-.add-task-container ion-item {
-    --background: #f5f5f5;
+ion-list ion-item {
+    background-color: #f4f3f1;
     border-radius: 10px;
+    margin-bottom: 8px;
+    padding: 10px;
+    color: #344c3d;
 }
 
-.add-task-modal .modal-wrapper {
-  max-width: 400px;
-  width: 90%;
-  border-radius: 12px;
+ion-list ion-item ion-label {
+    color: #344c3d;
 }
 
+ion-list ion-item h2 {
+    margin: 0;
+    font-size: 16px;
+    color: #344c3d;
+}
 
+ion-list ion-item p {
+    margin: 2px 0 0 0;
+    font-size: 14px;
+    color: #344c3d;
+}
 
-
-//Nav Bar
+/* ===========================
+   NAV BAR
+=========================== */
 ion-footer ion-toolbar {
-    --background: #ffffff;
-    border-top: 1px solid #ccc;
+  --background: #ffffff;
+  border-top: 1px solid #ccc;
 }
 
 .tab {
-    text-align: center;
-    color: #666;
-    font-size: 12px;
+  text-align: center;
+  color: #666;
+  font-size: 12px;
 }
 
 .tab ion-icon {
-    display: block;
-    font-size: 24px;
-    margin-bottom: 2 px;
+  display: block;
+  font-size: 24px;
+  margin-bottom: 2px;
 }
 
 .tab.active {
-    color: #3880ff;
-    font-weight: bold;
+  color: #344c3d;
+  font-weight: bold;
 }
 
 .tab.active ion-icon {
-    font-size: 26px;
+  font-size: 26px;
 }

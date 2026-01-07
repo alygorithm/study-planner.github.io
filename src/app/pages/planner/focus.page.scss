@@ -1,0 +1,27 @@
+.timer-container {
+    text-align: center;
+    margin-top: 50px;
+
+
+    h1 {
+        font-size: 5rem;
+        color: #344c3d;
+        margin-bottom: 40px;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+
+        ion-button {
+            border-radius: 10px;
+            min-width: 100px;
+        }
+    }
+}
+
+:host {
+    --ion-background-color: #f4f3f1;
+}
+

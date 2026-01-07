@@ -2,16 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { AddTaskModal } from './modals/add-task.modal';
-
+import { TaskDetailsModal } from './modals/task-details.modal';
 
 export interface Task {
   title: string;
   description?: string;
   time?: string;
 }
-
 
 @Component({
   selector: 'app-planner',
@@ -30,9 +28,7 @@ export class PlannerPage implements OnInit {
   activeTab: string = 'planner';
 
   // Task dinamiche per giorno
-  tasks: { [key: string]: string[] } = {
-    [new Date().toDateString()]: ['Compito matematica', 'Lezione storia', 'Progetto informatica']
-  };
+  tasks: { [key: string]: Task[] } = {};
 
   constructor(private router: Router, private modalController: ModalController) {}
 
@@ -61,29 +57,57 @@ export class PlannerPage implements OnInit {
 
   // Navigazione barra in basso
   navigate(page: string) {
-    console.log('Naviga verso:', page);
+    this.activeTab = page;
     if (page === 'planner') this.router.navigate(['/planner']);
     // altre pagine possono essere aggiunte qui
   }
 
   // --- APRI MODALE PER NUOVA TASK ---
   async openAddTaskModal() {
+    if (!this.selectedDay) return;
+
     const modal = await this.modalController.create({
       component: AddTaskModal,
       cssClass: 'add-task-modal',
-      componentProps: {
-        selectedDay: this.selectedDay
-      }
+      componentProps: { day: this.selectedDay.date }
     });
 
-    modal.onDidDismiss().then((result) => {
-      if (result.data && result.data.newTask && this.selectedDay) {
-        const dayKey = this.selectedDay.date.toDateString();
+    modal.onDidDismiss().then(result => {
+      if (result.data) {
+        const dayKey = this.selectedDay!.date.toDateString();
         if (!this.tasks[dayKey]) this.tasks[dayKey] = [];
-        this.tasks[dayKey].push(result.data.newTask);
+        this.tasks[dayKey].push(result.data);
       }
     });
 
-    return await modal.present();
+    await modal.present();
+  }
+
+  // --- APRI MODALE DETTAGLI TASK ---
+  async openTaskDetails(task: Task) {
+    if (!this.selectedDay) return;
+
+    const modal = await this.modalController.create({
+      component: TaskDetailsModal,
+      cssClass: 'add-task-modal',
+      componentProps: { task }
+    });
+
+    modal.onDidDismiss().then(result => {
+      if (!result.data) return;
+
+      const dayKey = this.selectedDay!.date.toDateString();
+
+      if (result.data.action === 'delete') {
+        this.tasks[dayKey] = this.tasks[dayKey].filter(t => t !== task);
+      }
+
+      if (result.data.action === 'complete') {
+        this.tasks[dayKey] = this.tasks[dayKey].filter(t => t !== task);
+        console.log('Task completata:', task);
+      }
+    });
+
+    await modal.present();
   }
 }

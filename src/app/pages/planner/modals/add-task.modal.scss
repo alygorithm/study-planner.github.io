@@ -1,0 +1,75 @@
+/* ===========================
+   MODALE ADD TASK – STILE PASTELLO
+=========================== */
+.add-task-modal {
+  --ion-background-color: #f4f3f1; /* Sfondo generale chiaro */
+  background-color: var(--ion-background-color);
+}
+
+.add-task-modal .modal-wrapper {
+  max-width: 400px;
+  width: 90%;
+  border-radius: 12px;
+  background-color: var(--ion-background-color);
+  padding: 15px;
+}
+
+/* ===========================
+   ION-ITEM (titolo, descrizione, orario)
+=========================== */
+.add-task-modal ion-item {
+  margin-top: 15px;
+  --background: #f4f3f1f3; /* rosa pastello chiaro */
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.1s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.add-task-modal ion-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* ===========================
+   LABEL
+=========================== */
+.add-task-modal ion-label {
+  font-weight: 500;
+  color: #344c3d; /* verde scuro testo */
+}
+
+/* ===========================
+   INPUT / TEXTAREA / DATETIME
+=========================== */
+.add-task-modal ion-input,
+.add-task-modal ion-datetime {
+  color: #344c3d; /* testo verde scuro */
+  background-color: #ffffff; /* sfondo chiaro input */
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+.add-task-modal ion-input::placeholder,
+.add-task-modal ion-textarea::placeholder {
+  color: #829672; /* placeholder verde pastello più chiaro */
+}
+
+/* ===========================
+   PULSANTE SALVA
+=========================== */
+.add-task-modal ion-button {
+  margin-top: 20px;
+  --background: #829672; /* verde pastello */
+  color: #ffffff;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.1s ease-in-out, box-shadow 0.2s ease-in-out, background 0.2s ease-in-out;
+}
+
+.add-task-modal ion-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  --background: #344c3d; /* verde scuro al hover */
+}

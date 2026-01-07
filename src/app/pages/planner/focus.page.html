@@ -1,0 +1,19 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Focus Mode</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+    <div class="time-container">
+        <h1>{{ timerMinutes | number:'2.0' }}:{{ timerSeconds | number:'2.0' }}</h1>
+
+        <div class="buttons">
+            <ion-button color="success" (click)="startTimer()" [disabled]="isRunning">Start</ion-button>
+            <ion-button color="warning" (click)="pauseTimer()" [disabled]="!isRunning">Pause</ion-button>
+            <ion-button color="danger" (click)="resetTimer()">Reset</ion-button>
+        </div>
+    </div>
+    
+</ion-content>

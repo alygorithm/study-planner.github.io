@@ -1,13 +1,14 @@
 <ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Planner</ion-title>
+  <ion-toolbar>
+    <ion-title><b>Planner</b></ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+
   <!-- Calendario orizzontale -->
   <div class="calendar-container">
-    <div class="day" 
+    <div class="day"
          *ngFor="let day of days"
          [class.today]="day.isToday"
          (click)="selectDay(day)">
@@ -18,55 +19,52 @@
   <!-- Task del giorno selezionato -->
   <div class="tasks-container" *ngIf="selectedDay">
     <h3>Task del {{ selectedDay.date | date:'fullDate' }}</h3>
-    <p *ngIf="!tasks[selectedDay.date.toDateString()]">Nessuna task per questo giorno.</p>
-    <ul>
-      <li *ngFor="let task of tasks[selectedDay.date.toDateString()]">{{ task }}</li>
-    </ul>
-  </div>
-</ion-content>
+    <p *ngIf="!tasks[selectedDay.date.toDateString()] || tasks[selectedDay.date.toDateString()].length === 0">
+      Nessuna task per questo giorno.
+    </p>
 
-
-<!-- Input per nuova task -->
-<ion-button expand="full" class="ion-margin" (click)="openAddTaskModal()">
-  + Aggiungi Task
-</ion-button>
-
-
-<!-- Lista delle task giornaliere -->
-  <div *ngIf="selectedDay">
-    <ion-list>
-      <ion-item *ngFor="let task of tasks[selectedDay.date.toDateString()]">
-        {{ task }}
+    <ion-list lines="none">
+      <ion-item *ngFor="let task of tasks[selectedDay.date.toDateString()]" class="task-card"
+                  button (click)="openTaskDetails(task)">
+        <ion-label>
+          <h2>{{ task.title }}</h2>
+          <p *ngIf="task.description">{{ task.description }}</p>
+          <p *ngIf="task.time">Orario: {{ task.time }}</p>
+        </ion-label>
       </ion-item>
     </ion-list>
   </div>
 
+  <!-- Pulsante per aprire modale -->
+  <ion-button expand="full" class="ion-margin add-task-btn" (click)="openAddTaskModal()">
+    + Aggiungi Task
+  </ion-button>
 
-
+</ion-content>
 
 <!-- Barra di navigazione -->
- <ion-footer>
+<ion-footer>
   <ion-toolbar>
     <ion-grid>
       <ion-row>
-        <ion-col class="tab" 
-                  [class.active]="activeTab === 'planner'"
-                  (click)="navigate('planner')">
+        <ion-col class="tab"
+                 [class.active]="activeTab === 'planner'"
+                 (click)="navigate('planner')">
           <ion-icon name="calendar-outline"></ion-icon>
           <ion-label>Planner</ion-label>
         </ion-col>
-        <ion-col class="tab" 
-                  [class.active]="activeTab == 'stats'"
-                  (click)="navigate('stats')">
+        <ion-col class="tab"
+                 [class.active]="activeTab === 'stats'"
+                 (click)="navigate('stats')">
           <ion-icon name="bar-chart-outline"></ion-icon>
           <ion-label>Statistiche</ion-label>
         </ion-col>
-        <ion-col class="tab" 
-                  [class.active]="activeTab === 'profile'" 
-                  (click)="navigate('profile')">
+        <ion-col class="tab"
+                 [class.active]="activeTab === 'profile'"
+                 (click)="navigate('profile')">
           <ion-icon name="person-outline"></ion-icon>
         </ion-col>
       </ion-row>
     </ion-grid>
   </ion-toolbar>
- </ion-footer>
+</ion-footer>
