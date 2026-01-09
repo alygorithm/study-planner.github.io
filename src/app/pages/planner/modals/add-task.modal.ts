@@ -9,8 +9,6 @@ import { Task } from '../planner.page';
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule],
   template: `
-
-
     <ion-header>
       <ion-toolbar>
         <ion-title><b>Aggiungi Task</b></ion-title>
@@ -33,8 +31,27 @@ import { Task } from '../planner.page';
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked" padding-bottom="30px">Orario</ion-label>
+        <ion-label position="stacked">Orario</ion-label>
         <ion-datetime display-format="HH:mm" picker-format="HH:mm" [(ngModel)]="taskTime"></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Materia</ion-label>
+        <ion-input [(ngModel)]="taskSubject"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Priorità</ion-label>
+        <ion-select [(ngModel)]="taskPriority">
+          <ion-select-option value="alta">Alta</ion-select-option>
+          <ion-select-option value="media">Media</ion-select-option>
+          <ion-select-option value="bassa">Bassa</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Durata stimata (min)</ion-label>
+        <ion-input type="number" [(ngModel)]="taskDuration"></ion-input>
       </ion-item>
 
       <ion-button expand="full" class="ion-margin-top save-btn" (click)="saveTask()">
@@ -42,8 +59,6 @@ import { Task } from '../planner.page';
       </ion-button>
 
     </ion-content>
-
-
   `,
   styleUrls: ['./add-task.modal.scss']
 })
@@ -54,6 +69,9 @@ export class AddTaskModal {
   taskTitle = '';
   taskDescription = '';
   taskTime = '';
+  taskSubject = '';
+  taskPriority = 'media';
+  taskDuration?: number;
 
   constructor(private modalCtrl: ModalController) {}
 
@@ -63,7 +81,10 @@ export class AddTaskModal {
     const newTask: Task = {
       title: this.taskTitle.trim(),
       description: this.taskDescription.trim(),
-      time: this.taskTime
+      time: this.taskTime,
+      subject: this.taskSubject.trim(),
+      priority: this.taskPriority,
+      duration: this.taskDuration
     };
 
     this.modalCtrl.dismiss(newTask);

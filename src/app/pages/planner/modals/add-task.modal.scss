@@ -6,70 +6,99 @@
   background-color: var(--ion-background-color);
 }
 
-.add-task-modal .modal-wrapper {
-  max-width: 400px;
-  width: 90%;
-  border-radius: 12px;
-  background-color: var(--ion-background-color);
-  padding: 15px;
+// --- Header ---
+ion-header ion-toolbar {
+  --background: #f2d1d4;
+  color: #344c3d;
+  font-family: var(--font-pixel);
 }
 
-/* ===========================
-   ION-ITEM (titolo, descrizione, orario)
-=========================== */
-.add-task-modal ion-item {
-  margin-top: 15px;
-  --background: #f4f3f1f3; /* rosa pastello chiaro */
-  border-radius: 10px;
-  padding: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: transform 0.1s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.add-task-modal ion-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-/* ===========================
-   LABEL
-=========================== */
-.add-task-modal ion-label {
-  font-weight: 500;
-  color: #344c3d; /* verde scuro testo */
-}
-
-/* ===========================
-   INPUT / TEXTAREA / DATETIME
-=========================== */
-.add-task-modal ion-input,
-.add-task-modal ion-datetime {
-  color: #344c3d; /* testo verde scuro */
-  background-color: #ffffff; /* sfondo chiaro input */
-  border-radius: 8px;
-  padding: 6px 8px;
-}
-
-.add-task-modal ion-input::placeholder,
-.add-task-modal ion-textarea::placeholder {
-  color: #829672; /* placeholder verde pastello più chiaro */
-}
-
-/* ===========================
-   PULSANTE SALVA
-=========================== */
-.add-task-modal ion-button {
-  margin-top: 20px;
-  --background: #829672; /* verde pastello */
-  color: #ffffff;
+ion-header ion-title {
   font-weight: bold;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: transform 0.1s ease-in-out, box-shadow 0.2s ease-in-out, background 0.2s ease-in-out;
+  font-size: 22px;
+  text-align: center;
+  letter-spacing: 1px;
 }
 
-.add-task-modal ion-button:hover {
+
+// --- Contenuto ---
+ion-content.add-task-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 15px;
+  justify-content: center;
+  align-items: center;
+}
+
+// --- Ion - Item ---
+ion-item {
+  --background: #c5cac1;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  --highlight-color-focused: transparent;
+  --highlight-color: transparent;
+  --border-color: transparent;
+  --border-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+ion-item ion-label {
+  color: #344c3d;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+ion-item ion-input,
+ion-item ion-textarea,
+ion-item ion-datetime, 
+ion-item ion-select {
+  color: #344c3d;
+  font-size: 14px;
+  font-family: var(--font-pixel);
+}
+
+ion-item ion-datetime {
+  background-color: #c5cac1;
+  font-family: var(--font-pixel);
+  margin-top: 15px;
+  font-size: 20px;
+}
+
+// --- Pulsanti ---
+.save-btn {
+  --background : #d8959b;
+  color: #fff;
+  font-weight: bold;
+  font-family: var(--font-pixel);
+  border-radius: 999px;
+  margin-top: 25px;
+  transition: all 0.2s ease;
+  width: 65%;
+}
+
+.save-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  --background: #344c3d; /* verde scuro al hover */
+}
+
+ion-button.save-btn::part(native) {
+    border-radius: 999px;
+    
+}
+
+// --- Selezione priorità / daytime ---
+ion-select, ion-datetime {
+  color: #344c3d;
+  width: 100%;
+}
+
+ion-select::part(text),
+ion-datetime::part(text-display) {
+  color: #344c3d;
+  font-size: 14px;
 }

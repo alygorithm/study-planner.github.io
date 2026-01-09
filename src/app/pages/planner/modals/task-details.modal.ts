@@ -29,6 +29,18 @@ import { Task } from '../planner.page';
         <b>Orario:</b> {{ task.time }}
       </p>
 
+      <p *ngIf="task.subject">
+        <b>Materia:</b> {{ task.subject }}
+      </p>
+
+      <p *ngIf="task.priority">
+        <b>Priorità:</b> {{ task.priority | titlecase }}
+      </p>
+
+      <p *ngIf="task.duration">
+        <b>Durata stimata:</b> {{ task.duration }} min
+      </p>
+
       <ion-button expand="full" color="success" (click)="completeTask()">
         Completa task
       </ion-button>
@@ -40,7 +52,6 @@ import { Task } from '../planner.page';
   `
 })
 export class TaskDetailsModal {
-
   @Input() task!: Task;
 
   constructor(private modalCtrl: ModalController){}

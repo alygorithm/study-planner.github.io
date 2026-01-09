@@ -9,6 +9,9 @@ export interface Task {
   title: string;
   description?: string;
   time?: string;
+  subject?: string;
+  priority?: string;
+  duration?: number;
 }
 
 @Component({
@@ -58,8 +61,20 @@ export class PlannerPage implements OnInit {
   // Navigazione barra in basso
   navigate(page: string) {
     this.activeTab = page;
-    if (page === 'planner') this.router.navigate(['/planner']);
-    // altre pagine possono essere aggiunte qui
+    switch(page) {
+      case 'planner':
+        this.router.navigate(['/planner']);
+        break;
+      case 'focus':
+        this.router.navigate(['/focus']);
+        break;
+      case 'profile':
+        this.router.navigate(['/profile']);
+        break;
+      case 'stats':
+        this.router.navigate(['/stats']);
+        break;
+    }
   }
 
   // --- APRI MODALE PER NUOVA TASK ---

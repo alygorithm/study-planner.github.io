@@ -9,9 +9,10 @@
   <!-- Calendario orizzontale -->
   <div class="calendar-container">
     <div class="day"
-         *ngFor="let day of days"
-         [class.today]="day.isToday"
-         (click)="selectDay(day)">
+        *ngFor="let day of days"
+        [class.today]="day.isToday"
+        [class.selected]="selectedDay && selectedDay.date.toDateString() === day.date.toDateString()"
+        (click)="selectDay(day)">
       {{ day.date | date:'EEE dd' }}
     </div>
   </div>
@@ -47,22 +48,24 @@
   <ion-toolbar>
     <ion-grid>
       <ion-row>
-        <ion-col class="tab"
-                 [class.active]="activeTab === 'planner'"
-                 (click)="navigate('planner')">
+        <ion-col class="tab" [class.active]="activeTab === 'planner'" (click)="navigate('planner')">
           <ion-icon name="calendar-outline"></ion-icon>
           <ion-label>Planner</ion-label>
         </ion-col>
-        <ion-col class="tab"
-                 [class.active]="activeTab === 'stats'"
-                 (click)="navigate('stats')">
+
+        <ion-col class="tab" [class.active]="activeTab === 'stats'" (click)="navigate('stats')">
           <ion-icon name="bar-chart-outline"></ion-icon>
           <ion-label>Statistiche</ion-label>
         </ion-col>
-        <ion-col class="tab"
-                 [class.active]="activeTab === 'profile'"
-                 (click)="navigate('profile')">
+
+        <ion-col class="tab" [class.active]="activeTab === 'focus'" (click)="navigate('focus')">
+          <ion-icon name="timer-outline"></ion-icon>
+          <ion-label>Focus</ion-label>
+        </ion-col>
+
+        <ion-col class="tab" [class.active]="activeTab === 'profile'" (click)="navigate('profile')">
           <ion-icon name="person-outline"></ion-icon>
+          <ion-label>Profilo</ion-label>
         </ion-col>
       </ion-row>
     </ion-grid>

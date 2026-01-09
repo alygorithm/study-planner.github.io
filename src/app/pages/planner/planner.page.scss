@@ -10,6 +10,10 @@ ion-content {
   --ion-background-color: #f4f3f1;
   background-color: var(--ion-background-color);
   color: var(--ion-text-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ===========================
@@ -21,7 +25,11 @@ ion-header ion-toolbar {
 }
 
 ion-header ion-title {
-  color: #344c3d; /* Assicura che il titolo sia leggibile */
+  color: #344c3d;
+  font-family: var(--font-pixel);
+  font-size: 25px;
+  text-align: center;
+  letter-spacing: 1px;
 }
 
 /* ===========================
@@ -31,7 +39,22 @@ ion-header ion-title {
   display: flex;
   overflow-x: auto;
   gap: 10px;
-  padding: 10px 0;
+  padding: 10px;
+  background-color: #f4f3f1; /* sfondo chiaro del calendario */
+  border-radius: 12px;
+}
+
+.calendar-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.calendar-container::-webkit-scrollbar-thumb {
+  background-color: #d8959b; /* rosa pastello scuro */
+  border-radius: 3px;
+}
+
+.calendar-container::-webkit-scrollbar-track {
+  background-color: #f4f3f1;
 }
 
 .day {
@@ -45,24 +68,34 @@ ion-header ion-title {
   white-space: nowrap;
   color: #344c3d;
   font-weight: 500;
+  transition: all 0.2s ease;
+  font-family: var(--font-pixel);
+  text-transform: capitalize;
+  font-size: 16px;
+  letter-spacing: 1px;
 }
 
 .day:hover {
-    background-color: #d8959b;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  background-color: #d8959b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .day.today {
-  background-color: #829672; /* verde pastello */
+  background-color: #829672; /* verde pastello chiaro */
   color: #fff;
   font-weight: bold;
 }
 
-.day.today:hover {
-    background-color: #344c3d;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+.day.selected {
+  background-color: #344c3d; /* verde scuro solo quando cliccato */
+  color: #fff;
+  font-weight: bold;
+}
+
+.day.today.selected {
+  /* se vuoi un verde leggermente più scuro se è oggi ed è selezionato */
+  background-color: #2c3e2f;
 }
 
 /* ===========================
@@ -86,6 +119,12 @@ ion-header ion-title {
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
+.tasks-container h3 {
+  font-weight: bold;
+  font-family: var(--font-pixel);
+  font-size: 25px;
+}
+
 ion-list ion-item {
   --background: #f4f3f1 !important; /* forza sfondo chiaro */
   border-radius: 10px;
@@ -98,6 +137,7 @@ ion-list ion-item h2 {
   margin: 0;
   font-size: 16px;
   color: #344c3d;
+  font-weight: bold;
 }
 
 ion-list ion-item p {
@@ -116,7 +156,14 @@ ion-button.add-task-btn {
   --background: #d8959b; /* rosa pastello scuro */
   color: #fff;
   font-weight: bold;
+  margin: 20px auto 0 auto;
+  width: 65%;
+  font-family: var(--font-pixel);
   
+}
+
+ion-button.add-task-btn::part(native) {
+    border-radius: 999px;
 }
 
 /* TASK LIST */
