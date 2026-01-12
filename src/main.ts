@@ -6,6 +6,8 @@ import { AppComponent } from './app/app.component';
 import { registerLocaleData } from '@angular/common';
 import localeIt from '@angular/common/locales/it';
 import { LOCALE_ID } from '@angular/core';
+import { importProvidersFrom } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http'; // <-- importa HttpClientModule qui
 
 registerLocaleData(localeIt);
 
@@ -14,6 +16,7 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
-    { provide: LOCALE_ID, useValue: 'it'}
+    { provide: LOCALE_ID, useValue: 'it'},
+    importProvidersFrom(HttpClientModule) // <-- lo registriamo qui globalmente
   ],
 });

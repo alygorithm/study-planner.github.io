@@ -1,22 +1,29 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// --- Middleware ---
 app.use(cors());
-app.use(express.json()); // sostituisce body-parser in Node moderno
+app.use(express.json());
 
-// --- Connessione a MongoDB ---
-mongoose.connect('mongodb://127.0.0.1:27017/plannerDB')
+// Connessione MongoDB
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connesso'))
-  .catch(err => console.error('Errore connessione MongoDB:', err));
+  .catch(err => console.log(err));
 
-// --- Routes ---
-const tasksRouter = require('./routes/tasks');
+// --- ROUTES ---
+const tasksRouter = require('./routes/tasks'); // <- qui deve corrispondere al router exportato
 app.use('/api/tasks', tasksRouter);
 
-// --- Start server ---
-app.listen(PORT, () => console.log(`Server in ascolto su http://localhost:${PORT}`));
+// Rotta di test
+app.get('/', (req, res) => {
+    res.send('Backend funzionante!');
+});
+
+// Avvio server
+app.listen(PORT, () => {
+    console.log(`Server in ascolto su http://localhost:${PORT}`);
+});

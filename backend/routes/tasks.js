@@ -1,8 +1,9 @@
+// routes/tasks.js
 const express = require('express');
 const router = express.Router();
-const Task = require('../models/task');
+const Task = require('../models/Task');
 
-// --- GET tutte le task
+// --- GET: tutte le task ---
 router.get('/', async (req, res) => {
   try {
     const tasks = await Task.find();
@@ -12,28 +13,17 @@ router.get('/', async (req, res) => {
   }
 });
 
-// --- GET task di un giorno specifico
-router.get('/day/:date', async (req, res) => {
-  try {
-    const day = new Date(req.params.date);
-    const nextDay = new Date(day);
-    nextDay.setDate(day.getDate() + 1);
-
-    const tasks = await Task.find({
-      date: { $gte: day, $lt: nextDay }
-    });
-
-    res.json(tasks);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// --- POST nuova task
+// --- POST: crea una nuova task ---
 router.post('/', async (req, res) => {
-  const { title, description, time, date } = req.body;
-
-  const task = new Task({ title, description, time, date });
+  const task = new Task({
+    title: req.body.title,
+    description: req.body.description,
+    time: req.body.time,
+    subject: req.body.subject,
+    priority: req.body.priority,
+    duration: req.body.duration,
+    day: req.body.day
+  });
 
   try {
     const newTask = await task.save();
@@ -43,25 +33,34 @@ router.post('/', async (req, res) => {
   }
 });
 
-// --- PUT aggiorna task
-router.put('/:id', async (req, res) => {
+// --- DELETE: cancella una task per id ---
+router.delete('/:id', async (req, res) => {
   try {
-    const updatedTask = await Task.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    res.json(updatedTask);
+    const deletedTask = await Task.findByIdAndDelete(req.params.id);
+    if (!deletedTask) return res.status(404).json({ message: 'Task non trovata' });
+    res.json({ message: 'Task cancellata' });
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 });
 
-// --- DELETE task
-router.delete('/:id', async (req, res) => {
+// --- PUT: aggiorna una task per id ---
+router.put('/:id', async (req, res) => {
   try {
-    await Task.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Task eliminata' });
+    const task = await Task.findById(req.params.id);
+    if (!task) return res.status(404).json({ message: 'Task non trovata' });
+
+    task.title = req.body.title ?? task.title;
+    task.description = req.body.description ?? task.description;
+    task.time = req.body.time ?? task.time;
+    task.subject = req.body.subject ?? task.subject;
+    task.priority = req.body.priority ?? task.priority;
+    task.duration = req.body.duration ?? task.duration;
+    task.day = req.body.day ?? task.day;
+    task.completed = req.body.completed ?? task.completed;
+
+    const updatedTask = await task.save();
+    res.json(updatedTask);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

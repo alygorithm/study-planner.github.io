@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Task } from '../planner.page';
+import { Task } from '../task.model';
 
 @Component({
   selector: 'app-add-task-modal',

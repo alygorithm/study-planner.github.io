@@ -1,4 +1,4 @@
-import { Task } from "./planner.page";
+import { Task } from "./task.model";
 
 /**
  * Calcola le ore di una singola task in base alla priorità

@@ -1,4 +1,4 @@
-import { Task } from "./planner.page";
+import { Task } from "./task.model";
 import { StudyHoursCalculator } from "./hours.calculator";
 
 export interface DailyStudyLoad {
