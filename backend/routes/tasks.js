@@ -1,9 +1,8 @@
-// routes/tasks.js
 const express = require('express');
 const router = express.Router();
-const Task = require('./models/Task');
+const Task = require('../models/Task'); // <-- assicurati che il file sia Task.js
 
-// --- GET: tutte le task ---
+// GET: tutte le task
 router.get('/', async (req, res) => {
   try {
     const tasks = await Task.find();
@@ -13,7 +12,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// --- POST: crea una nuova task ---
+// POST: crea nuova task
 router.post('/', async (req, res) => {
   const task = new Task({
     title: req.body.title,
@@ -33,7 +32,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// --- DELETE: cancella una task per id ---
+// DELETE: cancella per id
 router.delete('/:id', async (req, res) => {
   try {
     const deletedTask = await Task.findByIdAndDelete(req.params.id);
@@ -44,7 +43,7 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// --- PUT: aggiorna una task per id ---
+// PUT: aggiorna per id
 router.put('/:id', async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
