@@ -8,12 +8,18 @@
 
 ion-content {
   --ion-background-color: #f4f3f1;
-  background-color: var(--ion-background-color);
+  --ion-background-color: trasparent;
+  background-image: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+  url('/assets/background/sfondo.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   color: var(--ion-text-color);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  padding: 0 10px;
 }
 
 /* ===========================
@@ -38,10 +44,11 @@ ion-header ion-title {
 .calendar-container {
   display: flex;
   overflow-x: auto;
-  gap: 10px;
+  gap: 8px;
   padding: 10px;
-  background-color: #f4f3f1; /* sfondo chiaro del calendario */
+  background-color: transparent;
   border-radius: 12px;
+  margin-bottom: 20px;
 }
 
 .calendar-container::-webkit-scrollbar {
@@ -49,7 +56,7 @@ ion-header ion-title {
 }
 
 .calendar-container::-webkit-scrollbar-thumb {
-  background-color: #d8959b; /* rosa pastello scuro */
+  background-color: #d8959b;
   border-radius: 3px;
 }
 
@@ -61,7 +68,7 @@ ion-header ion-title {
   flex: 0 0 auto;
   padding: 10px 15px;
   border-radius: 10px;
-  background-color: #f2d1d4; /* rosa pastello */
+  background-color: #f2d1d4;
   text-align: center;
   min-width: 80px;
   cursor: pointer;
@@ -82,19 +89,18 @@ ion-header ion-title {
 }
 
 .day.today {
-  background-color: #829672; /* verde pastello chiaro */
+  background-color: #829672;
   color: #fff;
   font-weight: bold;
 }
 
 .day.selected {
-  background-color: #344c3d; /* verde scuro solo quando cliccato */
+  background-color: #344c3d;
   color: #fff;
   font-weight: bold;
 }
 
 .day.today.selected {
-  /* se vuoi un verde leggermente più scuro se è oggi ed è selezionato */
   background-color: #2c3e2f;
 }
 
@@ -103,100 +109,120 @@ ion-header ion-title {
 =========================== */
 .tasks-container {
   margin-top: 20px;
-}
-
-.task-card {
-    background-color: #f2d1d4;
-    border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: trasform 0.1s ease-in-out;
-}
-
-.task-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
 }
 
 .tasks-container h3 {
-  font-weight: bold;
   font-family: var(--font-pixel);
+  font-weight: bold;
   font-size: 25px;
+  margin-bottom: 15px;
+  color: #344c3d;
+
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 600px) {
+  .tasks-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .tasks-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .tasks-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+
+/* Card singola task */
+.task-card {
+  background-color: #f2d1d4;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  padding: 12px 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.task-card h2 {
+  font-family: var(--font-pixel);
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 0 4px 0;
+  color: #344c3d;
+}
+
+.task-card p {
+  font-family: var(--font-pixel);
+  font-size: 14px;
+  margin: 0;
+  color: #344c3d;
+}
+
+.task-card .task-details {
+  font-weight: bold;
+  color: #d8959b;
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+/* Assicura che ion-item dentro ion-list non interferisca */
+ion-list {
+  width: 100%;
 }
 
 ion-list ion-item {
-  --background: #f4f3f1 !important; /* forza sfondo chiaro */
-  border-radius: 10px;
-  margin-bottom: 8px;
-  padding: 10px;
-  color: #344c3d;
-}
-
-ion-list ion-item h2 {
+  border-radius: 0;
   margin: 0;
-  font-size: 16px;
-  color: #344c3d;
-  font-weight: bold;
-}
-
-ion-list ion-item p {
-  margin: 2px 0 0 0;
-  font-size: 14px;
+  padding: 0;
   color: #344c3d;
 }
 
+ion-list ion-item ion-label {
+  color: #344c3d;
+}
 
+ion-item.task-card {
+  --background: transparent !important;
+  --ion-item-background-hover: transparent !important;
+  --border-color: transparent;
+  --border-style: none;
+}
 
 
 /* ===========================
    PULSANTE “AGGIUNGI TASK”
 =========================== */
 ion-button.add-task-btn {
-  --background: #d8959b; /* rosa pastello scuro */
+  --background: #d8959b;
   color: #fff;
   font-weight: bold;
   margin: 20px auto 0 auto;
   width: 65%;
   font-family: var(--font-pixel);
-  
 }
 
 ion-button.add-task-btn::part(native) {
     border-radius: 999px;
-}
-
-/* TASK LIST */
-.tasks-container {
-    margin-top: 20px;
-}
-
-ion-list {
-    background-color: transparent;
-}
-
-ion-list ion-item {
-    background-color: #f4f3f1;
-    border-radius: 10px;
-    margin-bottom: 8px;
-    padding: 10px;
-    color: #344c3d;
-}
-
-ion-list ion-item ion-label {
-    color: #344c3d;
-}
-
-ion-list ion-item h2 {
-    margin: 0;
-    font-size: 16px;
-    color: #344c3d;
-}
-
-ion-list ion-item p {
-    margin: 2px 0 0 0;
-    font-size: 14px;
-    color: #344c3d;
 }
 
 /* ===========================

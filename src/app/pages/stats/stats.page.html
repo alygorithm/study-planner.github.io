@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title><b>Statistiche</b></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <h2>Report delle tue attività</h2>
+    <p> BLA BLA BLA</p>
+</ion-content>
+
+<!-- Barra di navigazione -->
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col class="tab" [class.active]="activeTab === 'planner'" (click)="navigate('planner')">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <ion-label>Planner</ion-label>
+        </ion-col>
+
+        <ion-col class="tab" [class.active]="activeTab === 'stats'" (click)="navigate('stats')">
+          <ion-icon name="bar-chart-outline"></ion-icon>
+          <ion-label>Statistiche</ion-label>
+        </ion-col>
+
+        <ion-col class="tab" [class.active]="activeTab === 'focus'" (click)="navigate('focus')">
+          <ion-icon name="timer-outline"></ion-icon>
+          <ion-label>Focus</ion-label>
+        </ion-col>
+
+        <ion-col class="tab" [class.active]="activeTab === 'profile'" (click)="navigate('profile')">
+          <ion-icon name="person-outline"></ion-icon>
+          <ion-label>Profilo</ion-label>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

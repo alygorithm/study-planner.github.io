@@ -17,6 +17,12 @@
     </div>
   </div>
 
+
+  <div class="study-load" *ngIf="getTodayStudyLoad() as load">
+    <p>Oggi: <b>{{ load.hours }} h di studio previste</b></p>
+    <small> {{ load.tasks.length }} task contribuiscono a queste ore </small>
+  </div>
+
   <!-- Task del giorno selezionato -->
   <div class="tasks-container" *ngIf="selectedDay">
     <h3>Task del {{ selectedDay.date | date:'fullDate' }}</h3>
@@ -24,16 +30,15 @@
       Nessuna task per questo giorno.
     </p>
 
-    <ion-list lines="none">
-      <ion-item *ngFor="let task of tasks[selectedDay.date.toDateString()]" class="task-card"
-                  button (click)="openTaskDetails(task)">
-        <ion-label>
-          <h2>{{ task.title }}</h2>
-          <p *ngIf="task.description">{{ task.description }}</p>
-          <p *ngIf="task.time">Orario: {{ task.time }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+    <ion-item *ngFor="let task of tasks[selectedDay.date.toDateString()]" class="task-card" button (click)="openTaskDetails(task)">
+      <ion-label>
+        <h2>{{ task.title }}</h2>
+        <p *ngIf="task.subject">
+          {{ task.subject }} - {{ task.day | date:'shortDate' }}
+          <span *ngIf="task.time">ore {{ task.time }}</span>
+        </p>
+      </ion-label>
+    </ion-item>
   </div>
 
   <!-- Pulsante per aprire modale -->

@@ -1,0 +1,183 @@
+:host {
+  --ion-background-color: #f4f3f1;
+  --ion-text-color: #344c3d;
+}
+
+ion-header ion-toolbar {
+  --background: #f2d1d4;
+  color: #344c3d;
+}
+
+ion-header ion-title {
+  font-family: var(--font-pixel);
+  font-size: 25px;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 1px;
+  color: #344c3d;
+}
+
+ion-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* parte dall’alto, ma card centrata con margin-top */
+  min-height: 100vh;
+  padding: 20px;
+  padding-top: 40px;
+  gap: 40px;
+  box-sizing: border-box;
+}
+
+/* ===========================
+   CARD PROFILO
+=========================== */
+.profile-card {
+  background-color: #f2d1d4;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 0 auto; /* centrata orizzontalmente */
+}
+
+.profile-card .avatar {
+  font-size: 100px;
+  color: #344c3d;
+  margin-bottom: 10px;
+}
+
+.profile-card ion-card-title {
+  font-family: var(--font-pixel);
+  color: #344c3d;
+  font-size: 26px;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.profile-card ion-card-subtitle {
+  font-family: var(--font-pixel);
+  font-size: 16px;
+  color: #466652;
+}
+
+/* ===========================
+   STATS
+=========================== */
+.profile-stats {
+  display: flex;               /* Flex per centrare */
+  flex-wrap: wrap;             /* Va a capo su schermi piccoli */
+  justify-content: center;     /* Centrato orizzontalmente */
+  gap: 20px;                   /* Spazio tra le card */
+  width: 100%;
+  max-width: 1000px;           /* Contenitore massimo */
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background-color: #f2d1d4;   /* stesso colore della profile card */
+  border-radius: 12px;
+  text-align: center;
+  font-family: var(--font-pixel);
+  color: #344c3d;
+  padding: 20px;
+  flex: 1 1 150px;             /* flessibile con min width */
+  max-width: 220px;            /* dimensione massima */
+  min-height: 120px;           /* altezza uniforme */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.stat-card ion-card-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #344c3d;
+}
+
+.stat-card ion-card-subtitle {
+  font-size: 14px;
+  font-weight: normal;
+  color: #466652;
+}
+
+/* ===========================
+   PULSANTI AZIONE
+=========================== */
+.profile-actions {
+  display: flex;
+  flex-direction: column;     /* uno sopra l’altro */
+  gap: 15px;                  /* spazio tra pulsanti */
+  align-items: center;        /* centrati orizzontalmente */
+  width: 100%;
+  max-width: 400px;           /* uguale alla profile card */
+  margin-bottom: 40px;        /* spazio dal footer */
+}
+
+.profile-actions ion-button {
+  width: 100%;                /* stesso della card */
+  font-family: var(--font-pixel);
+  letter-spacing: 1px;
+}
+
+/* ===========================
+   NAV BAR
+=========================== */
+ion-footer ion-toolbar {
+  --background: #ffffff;
+  border-top: 1px solid #ccc;
+}
+
+.tab {
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+}
+
+.tab ion-icon {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 2px;
+}
+
+.tab.active {
+  color: #344c3d;
+  font-weight: bold;
+}
+
+.tab.active ion-icon {
+  font-size: 26px;
+}
+
+/* ===========================
+   MEDIA QUERIES
+=========================== */
+@media (min-width: 900px) {
+  ion-content {
+    justify-content: flex-start; /* in schermi grandi parte dall’alto */
+    padding-top: 60px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .profile-card {
+    max-width: 450px;
+  }
+
+  .action-btn {
+    max-width: 450px;
+  }
+}

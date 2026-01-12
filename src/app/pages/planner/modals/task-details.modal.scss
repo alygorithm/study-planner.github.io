@@ -1,0 +1,200 @@
+:host {
+    --ion-background-color: #f4f3f1;
+    color: #344c3d;
+}
+
+ion-header ion-toolbar {
+    --background: #f2d1d4;
+    color: #344c3d;
+}
+
+ion-header ion-title {
+    font-family: var(--font-pixel);
+  font-weight: bold;
+  font-size: 22px;
+  text-align: center;
+  letter-spacing: 1px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+ion-button.close-btn {
+  font-size: 20px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+ion-button.close-btn:hover {
+    color: #d8959b;
+}
+
+ion-content {
+    --background: #f4f3f1;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.task-details-card {
+    background-color: #f4f3f1;
+    border-radius: 12px;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.task-details-card h2 {
+    font-family: var(--font-pixel);
+    font-weight: bold;
+    font-size: 24px;
+    color: #344c3d;
+    margin: 0;
+    background-color: #d8959b;
+}
+
+.task-details-card p {
+    font-family: var(--font-pixel);
+    color: #344c3d;
+    font-size: 17px;
+    margin: 1;
+}
+
+.task-meta {
+    font-weight: bold;
+    color: #d8959b;
+    font-size: 15px;
+}
+
+.task-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.complete-btn {
+    --background: #829672;
+    font-family: var(--font-pixel);
+    letter-spacing: 3px;
+    font-size: 16px;
+    margin-top: 20px;
+    color: #fff;
+    width: 65%;
+    display: block;
+    transition: all 0.2s ease;
+}
+
+.complete-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    border-radius: 999px;
+}
+
+ion-button.complete-btn::part(native) {
+    border-radius: 999px;
+    
+}
+
+.complete-btn:active {
+    transform: scale(0.96);
+}
+
+.delete-btn {
+    --background: #d8959b;
+    font-family: var(--font-pixel);
+    letter-spacing: 3px;
+    font-size: 16px;
+    margin-top: 20px;
+    color: #fff;
+    width: 65%;
+    display: block;
+    transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    border-radius: 999px;
+}
+
+ion-button.delete-btn::part(native) {
+    border-radius: 999px;
+    
+}
+
+.task-details-card.completed {
+    transform: scale(0.95) rotate(-2deg);
+    opacity: 0.5;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.task-details-card.completed::after {
+  content: '✓';
+  position: absolute;
+  font-size: 50px;
+  color: #829672; /* verde */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  animation: pop-check 0.4s forwards;
+}
+
+@keyframes pop-check {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+.task-details-card.deleting {
+    transform: scale(0.95);
+    opacity: 0;
+    background-color: #f28a8a; /* rosso leggero */
+    transition: all 0.25s ease;
+    position: relative; /* necessario per posizionare la X */
+}
+
+.task-details-card.deleting::after {
+  content: '✕';
+  position: absolute;
+  font-size: 50px;
+  color: #d8959b; /* rosa scuro / contrasto */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  animation: pop-x 0.4s forwards;
+}
+
+@keyframes pop-x {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+.delete-btn:active {
+    transform: scale(0.96);
+}

@@ -1,0 +1,45 @@
+:host {
+  --ion-background-color: #f4f3f1;  /* Sfondo principale */
+  --ion-text-color: #344c3d;        /* Colore testo principale */
+}
+
+/* ===========================
+   HEADER
+=========================== */
+ion-header ion-toolbar {
+  --background: #f2d1d4; /* Rosa pastello */
+  color: #344c3d;         /* Verde scuro per testo */
+}
+
+ion-header ion-title {
+  color: #344c3d; /* Assicura che il titolo sia leggibile */
+}
+
+/* ===========================
+   NAV BAR
+=========================== */
+ion-footer ion-toolbar {
+  --background: #ffffff;
+  border-top: 1px solid #ccc;
+}
+
+.tab {
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+}
+
+.tab ion-icon {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 2px;
+}
+
+.tab.active {
+  color: #344c3d;
+  font-weight: bold;
+}
+
+.tab.active ion-icon {
+  font-size: 26px;
+}

@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AddTaskModal } from './modals/add-task.modal';
 import { TaskDetailsModal } from './modals/task-details.modal';
+import { StudyHoursCalculator } from './hours.calculator';
+import { StudyLoadCalculator, DailyStudyLoad } from './study-load.calculator';
 
 export interface Task {
   title: string;
@@ -12,6 +14,7 @@ export interface Task {
   subject?: string;
   priority?: string;
   duration?: number;
+  day: Date;
 }
 
 @Component({
@@ -33,13 +36,17 @@ export class PlannerPage implements OnInit {
   // Task dinamiche per giorno
   tasks: { [key: string]: Task[] } = {};
 
+  // Mappa ore studio per giorno
+  studyLoadMap: { [key: string]: number } = {};
+
   constructor(private router: Router, private modalController: ModalController) {}
 
   ngOnInit() {
     this.generateDays();
+    this.updateStudyLoadMap();
   }
 
-  // Genera 30 giorni a partire da oggi
+  // --- GENERA CALENDARIO ---
   generateDays() {
     const today = new Date();
     const totalDays = 30;
@@ -49,35 +56,26 @@ export class PlannerPage implements OnInit {
       this.days.push({ date, isToday: date.toDateString() === today.toDateString() });
     }
 
-    // Seleziona giorno corrente di default
     this.selectedDay = this.days.find(d => d.isToday) || this.days[0];
   }
 
-  // Seleziona giorno
+  // --- SELEZIONA GIORNO ---
   selectDay(day: { date: Date, isToday: boolean }) {
     this.selectedDay = day;
   }
 
-  // Navigazione barra in basso
+  // --- NAVIGAZIONE BARRA INFERIORE ---
   navigate(page: string) {
     this.activeTab = page;
     switch(page) {
-      case 'planner':
-        this.router.navigate(['/planner']);
-        break;
-      case 'focus':
-        this.router.navigate(['/focus']);
-        break;
-      case 'profile':
-        this.router.navigate(['/profile']);
-        break;
-      case 'stats':
-        this.router.navigate(['/stats']);
-        break;
+      case 'planner': this.router.navigate(['/planner']); break;
+      case 'focus': this.router.navigate(['/focus']); break;
+      case 'profile': this.router.navigate(['/profile']); break;
+      case 'stats': this.router.navigate(['/stats']); break;
     }
   }
 
-  // --- APRI MODALE PER NUOVA TASK ---
+  // --- MODALE NUOVA TASK ---
   async openAddTaskModal() {
     if (!this.selectedDay) return;
 
@@ -89,16 +87,19 @@ export class PlannerPage implements OnInit {
 
     modal.onDidDismiss().then(result => {
       if (result.data) {
-        const dayKey = this.selectedDay!.date.toDateString();
+        const dayKey = new Date(result.data.day).toDateString();
         if (!this.tasks[dayKey]) this.tasks[dayKey] = [];
         this.tasks[dayKey].push(result.data);
+
+        // aggiorna ore studio
+        this.updateStudyLoadMap();
       }
     });
 
     await modal.present();
   }
 
-  // --- APRI MODALE DETTAGLI TASK ---
+  // --- MODALE DETTAGLI TASK ---
   async openTaskDetails(task: Task) {
     if (!this.selectedDay) return;
 
@@ -113,16 +114,41 @@ export class PlannerPage implements OnInit {
 
       const dayKey = this.selectedDay!.date.toDateString();
 
-      if (result.data.action === 'delete') {
+      if (result.data.action === 'delete' || result.data.action === 'complete') {
         this.tasks[dayKey] = this.tasks[dayKey].filter(t => t !== task);
-      }
-
-      if (result.data.action === 'complete') {
-        this.tasks[dayKey] = this.tasks[dayKey].filter(t => t !== task);
-        console.log('Task completata:', task);
+        this.updateStudyLoadMap();
       }
     });
 
     await modal.present();
+  }
+
+  // --- CALCOLO ORE TASK DEL GIORNO SELEZIONATO ---
+  getStudyHoursForSelectedDay(): number {
+    if(!this.selectedDay) return 0;
+
+    const dayKey = this.selectedDay.date.toDateString();
+    const dayTasks = this.tasks[dayKey] || [];
+    return StudyHoursCalculator.calculateDayHours(dayTasks);
+  }
+
+  // --- CARICO STUDIO PER IL GIORNO SELEZIONATO (distribuito) ---
+  getTodayStudyLoad(): DailyStudyLoad | null {
+    if(!this.selectedDay) return null;
+
+    return StudyLoadCalculator.calculateLoadForDay(
+      this.tasks,
+      this.selectedDay.date
+    );
+  }
+
+  // --- AGGIORNA STUDY LOAD MAP ---
+  updateStudyLoadMap() {
+    this.studyLoadMap = {};
+    for (const day of this.days) {
+      const dayKey = day.date.toDateString();
+      const load = StudyLoadCalculator.calculateLoadForDay(this.tasks, day.date);
+      this.studyLoadMap[dayKey] = load.hours;
+    }
   }
 }

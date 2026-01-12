@@ -18,8 +18,22 @@ ion-header ion-title {
   font-size: 22px;
   text-align: center;
   letter-spacing: 1px;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
+ion-button.close-btn {
+  font-size: 20px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+ion-button.close-btn:hover {
+    color: #d8959b;
+}
 
 // --- Contenuto ---
 ion-content.add-task-modal {
@@ -76,9 +90,10 @@ ion-item ion-datetime {
   font-weight: bold;
   font-family: var(--font-pixel);
   border-radius: 999px;
-  margin-top: 25px;
-  transition: all 0.2s ease;
   width: 65%;
+  margin: 25px auto;
+  display: block;
+  transition: all 0.2s ease;
 }
 
 .save-btn:hover {
@@ -93,7 +108,7 @@ ion-button.save-btn::part(native) {
 
 // --- Selezione priorità / daytime ---
 ion-select, ion-datetime {
-  color: #344c3d;
+  --color: #344c3d;
   width: 100%;
 }
 
