@@ -18,7 +18,7 @@ export interface FocusSession {
 export class TaskService {
 
   private baseUrl = 'https://study-planner-backend-sz33.onrender.com/api/tasks';
-  private focusUrl = 'https://study-planner-backend-sz33.onrender.com/api/focus'; // <-- nuova rotta
+  private focusUrl = 'https://study-planner-backend-sz33.onrender.com/api/focus-sessions'; // <-- nuova rotta
 
   constructor(private http: HttpClient) {}
 
