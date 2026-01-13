@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const FocusSession = require('../models/focusTemp');
+const FocusSession = require('../models/focusTemp'); // corretto
 
 // GET tutte le sessioni
 router.get('/', async (req, res) => {
   try {
-    const sessions = await Focus.find();
+    const sessions = await FocusSession.find(); // <-- qui
     res.json(sessions);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 
 // POST nuova sessione
 router.post('/', async (req, res) => {
-  const session = new Focus({
+  const session = new FocusSession({        // <-- qui
     subject: req.body.subject,
     minutes: req.body.minutes,
     completed: req.body.completed,
