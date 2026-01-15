@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -14,17 +15,20 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connesso'))
   .catch(err => console.log('Errore connessione MongoDB:', err));
 
-// --- ROUTES ---
+// --- ROUTES API ---
 const tasksRouter = require('./routes/tasks');
 app.use('/api/tasks', tasksRouter);
 
-// Rotta di test
-app.get('/', (req, res) => {
-  res.send('Backend funzionante!');
-});
-
 const focusSessionRouter = require('./routes/focus');
 app.use('/api/focus-sessions', focusSessionRouter);
+
+// --- SERVE FRONTEND ---
+app.use(express.static(path.join(__dirname, 'www')));
+
+// fallback per routing Angular/Ionic
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'www', 'index.html'));
+});
 
 // Avvio server
 app.listen(PORT, '0.0.0.0', () => {
