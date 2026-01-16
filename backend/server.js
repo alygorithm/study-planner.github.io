@@ -14,12 +14,9 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB connesso'))
-.catch(err => console.error('Errore connessione MongoDB:', err));
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB connesso'))
+  .catch(err => console.error('Errore connessione MongoDB:', err));
 
 app.use('/api/tasks', require('./routes/tasks'));
 app.use('/api/focus-sessions', require('./routes/focus'));
