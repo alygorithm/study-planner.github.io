@@ -67,12 +67,15 @@ export class PlannerPage implements OnInit {
   updateStudyLoad() {
     const allTasks: Task[] = [];
     Object.values(this.tasks).forEach(dayTasks => {
-      dayTasks.forEach(task => allTasks.push(task));
+      dayTasks.forEach(task => {
+        if (!task.completed) allTasks.push(task); // <-- FILTRO QUI
+      });
     });
 
     const dates = this.days.map(d => d.date);
     this.studyLoadMap = StudyLoadCalculator.distributeLoad(allTasks, dates);
   }
+
 
   getSelectedDayStudyLoad(): DailyStudyLoad | null {
     if (!this.selectedDay) return null;
@@ -191,12 +194,19 @@ export class PlannerPage implements OnInit {
 
     this.taskService.updateTask(task).subscribe(updated => {
       const key = new Date(updated.day).toDateString();
-      this.tasks[key] = this.tasks[key].map(t =>
-        t._id === updated._id ? updated : t
-      );
+
+      // 1) aggiorno la lista locale
+      if (this.tasks[key]) {
+        this.tasks[key] = this.tasks[key].map(t =>
+          t._id === updated._id ? updated : t
+        );
+      }
+
+      // 2) ricalcolo il carico
       this.updateStudyLoad();
     });
   }
+
 
   // ------------------ Navigazione ------------------
 

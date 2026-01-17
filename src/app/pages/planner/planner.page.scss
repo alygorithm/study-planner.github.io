@@ -130,6 +130,7 @@ ion-header ion-title {
   opacity: 0.8;
 }
 
+
 /* ===========================
    TASK LIST
 =========================== */
@@ -173,16 +174,31 @@ ion-header ion-title {
    CARD SINGOLA TASK
 =========================== */
 .task-card {
+   --background: transparent !important;
+  --background-hover: transparent !important;
+  --background-focused: transparent !important;
+  --background-activated: transparent !important;
+
+  --border-style: none !important;
+  --border-width: 0 !important;
+  --border-color: transparent !important;
+
+   --inner-border-width: 0 !important;
+  --inner-border-style: none !important;
+  --inner-padding-start: 0;
+  --inner-padding-end: 0;
+  --min-height: unset;
+
+  width: 100%;
   background-color: #f2d1d4;
   border-radius: 12px;
-  margin-bottom: 12px;
   padding: 12px 15px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: block; /* rende ion-item come un blocco */
+
   position: relative;
+  overflow: hidden;
 }
 
 .task-card:hover {
@@ -205,25 +221,41 @@ ion-header ion-title {
   color: #344c3d;
 }
 
+/* ===========================
+   TASK COMPLETATA (BARRATO CON ANIMAZIONE)
+=========================== */
 .task-card.completed {
-  opacity: 0.5;
+  opacity: 0.7;
   background-color: #e0e0e0;
 }
 
-.task-card.completed::after {
-  content: "COMPLETATA";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  --background: rgba(255, 255, 255, 0.8);
-  color: #444;
-  font-size: 12px;
-  font-weight: bold;
-  padding: 4px 10px;
-  border-radius: 12px;
-  pointer-events: none;
+.task-card.completed h2,
+.task-card.completed p {
+  color: #666;
+  text-decoration: none;
+  position: relative;
+  display: inline-block;  
 }
+
+.task-card.completed h2::after,
+.task-card.completed p::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 55%;
+  height: 3px;
+  width: 0%;
+  background: #344c3d;
+  animation: strike 0.6s forwards;
+}
+
+@keyframes strike {
+  to {
+    width: 100%;
+  }
+}
+
+
 
 /* ===========================
    PULSANTE AGGIUNGI TASK
