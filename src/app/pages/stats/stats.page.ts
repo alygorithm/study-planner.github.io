@@ -7,7 +7,6 @@ import { TaskService, FocusSession } from '../planner/task.service';
 import { Task } from '../planner/task.model';
 import { StudyHoursCalculator } from '../planner/hours.calculator';
 
-// Interfaccia per le statistiche settimanali
 interface DayStat {
   label: string;
   hours: number;
@@ -23,26 +22,20 @@ interface DayStat {
 })
 export class StatsPage implements OnInit {
 
-  // Tab attiva nella navigazione
   activeTab = 'stats';
 
   tasks: Task[] = [];
   focusSessions: FocusSession[] = [];
 
-  totalMinutes = 0;          // totale settimana
   todayMinutes = 0;
-  todayTarget = 240;         // 4h
+  todayTarget = 240;
   todayProgress = 0;
 
-  // Statistiche task
   completedTasks = 0;
   totalTasks = 0;
-  completionPercent = 0;
 
-  // Statistiche settimanali
   weekStats: DayStat[] = [];
 
-  // Statistiche focus
   focusTotalSessions = 0;
   focusTotalMinutes = 0;
   focusAvgMinutes = 0;
@@ -58,13 +51,11 @@ export class StatsPage implements OnInit {
     this.loadFocusSessions();
   }
 
-  // Navigazione tra le sezioni dell'app
   navigate(page: string) {
     this.activeTab = page;
     this.router.navigate([`/${page}`]);
   }
 
-  // Recupera le task e calcola le statistiche correlate
   loadTasks() {
     this.taskService.getTasks().subscribe(tasks => {
       this.tasks = tasks.map(t => ({
@@ -74,17 +65,12 @@ export class StatsPage implements OnInit {
 
       this.totalTasks = this.tasks.length;
       this.completedTasks = this.tasks.filter(t => t.completed).length;
-      this.completionPercent = this.totalTasks
-        ? Math.round((this.completedTasks / this.totalTasks) * 100)
-        : 0;
 
-      this.calculateWeeklyTotal();
       this.calculateTodayProgress();
       this.calculateWeekStats();
     });
   }
 
-  // Recupera le sessioni di studio (focus)
   loadFocusSessions() {
     this.taskService.getFocusSessions().subscribe(sessions => {
       this.focusSessions = sessions;
@@ -99,30 +85,6 @@ export class StatsPage implements OnInit {
     });
   }
 
-  // Calcola il totale della settimana (task completate)
-  calculateWeeklyTotal() {
-    const today = new Date();
-
-    // Inizio settimana = lunedì
-    const start = new Date(today);
-    const dayOfWeek = (today.getDay() + 6) % 7; // 0 = lunedì
-    start.setDate(today.getDate() - dayOfWeek);
-    start.setHours(0, 0, 0, 0);
-
-    const end = new Date(start);
-    end.setDate(start.getDate() + 6);
-    end.setHours(23, 59, 59, 999);
-
-    this.totalMinutes = this.tasks
-      .filter(t => t.completed && t.completedAt)
-      .filter(t => {
-        const d = new Date(t.completedAt!);
-        return d >= start && d <= end;
-      })
-      .reduce((sum, t) => sum + StudyHoursCalculator.calculateTaskMinutes(t), 0);
-  }
-
-  // Calcola il progresso di studio della giornata corrente
   calculateTodayProgress() {
     const today = new Date().toDateString();
 
@@ -134,12 +96,10 @@ export class StatsPage implements OnInit {
     this.todayProgress = Math.min(this.todayMinutes / this.todayTarget, 1);
   }
 
-  // Calcola le statistiche settimanali di studio
   calculateWeekStats() {
     const labels = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
     const today = new Date();
 
-    // Inizio settimana = lunedì
     const start = new Date(today);
     const dayOfWeek = (today.getDay() + 6) % 7;
     start.setDate(today.getDate() - dayOfWeek);
@@ -155,7 +115,7 @@ export class StatsPage implements OnInit {
         .reduce((sum, t) => sum + StudyHoursCalculator.calculateTaskMinutes(t), 0);
     });
 
-    const maxMinutes = Math.max(...minutesPerDay, 120); // minimo 2h per grafico visibile
+    const maxMinutes = Math.max(...minutesPerDay, 1);
 
     this.weekStats = minutesPerDay.map((min, i) => ({
       label: labels[i],

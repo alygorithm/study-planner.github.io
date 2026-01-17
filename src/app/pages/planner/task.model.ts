@@ -1,13 +1,13 @@
 // Interfaccia Task
 export interface Task {
-  _id?: string;           // ID generato dal backend
+  _id?: string;
   title: string;
   description?: string;
   time?: string;
   subject?: string;
   priority?: string;
   duration?: number;
-  day: string;              // data di scadenza / pianificazione
+  day: string; // deve essere string per compatibilità DB
   completed?: boolean;
   completedAt?: Date | null;
 }

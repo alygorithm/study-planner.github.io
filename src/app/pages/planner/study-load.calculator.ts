@@ -28,6 +28,7 @@ export class StudyLoadCalculator {
     const loadMap: { [key: string]: DailyStudyLoad } = {};
     const overflow: { task: Task; missingMinutes: number }[] = [];
 
+    // inizializza i giorni
     days.forEach(day => {
       const d = new Date(day);
       d.setHours(0,0,0,0);
@@ -44,24 +45,29 @@ export class StudyLoadCalculator {
       (a, b) => this.toLocalDate(a.day).getTime() - this.toLocalDate(b.day).getTime()
     );
 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     for (const task of sortedTasks) {
       const totalMinutes = StudyHoursCalculator.calculateTaskMinutes(task);
       const deadline = this.toLocalDate(task.day);
 
+      let remainingMinutes = totalMinutes;
+
+      const taskDay = new Date(task.day);
+      taskDay.setHours(0, 0, 0, 0);
+
+      const endDay = taskDay < today ? today : taskDay;
+
       const relevantDays = days
         .map(d => this.toLocalDate(d.toISOString()))
-        .filter(d => d.getTime() <= deadline.getTime())
+        .filter(d => d.getTime() <= endDay.getTime())
         .sort((a,b) => b.getTime() - a.getTime());
 
       if (relevantDays.length === 0) {
         overflow.push({ task, missingMinutes: totalMinutes });
         continue;
       }
-
-      const baseMinutes = Math.floor(totalMinutes / relevantDays.length);
-      const remainder = totalMinutes % relevantDays.length;
-
-      let remaining = totalMinutes;
 
       for (let i = 0; i < relevantDays.length; i++) {
         const day = relevantDays[i];
@@ -71,7 +77,7 @@ export class StudyLoadCalculator {
         const currentMinutes = load.assignedMinutes;
         if (currentMinutes >= this.MAX_MINUTES_PER_DAY) continue;
 
-        let assign = baseMinutes + (i < remainder ? 1 : 0);
+        let assign = Math.floor(totalMinutes / relevantDays.length) + (i < (totalMinutes % relevantDays.length) ? 1 : 0);
         if (assign < this.MIN_MINUTES_PER_DAY) assign = this.MIN_MINUTES_PER_DAY;
 
         const available = this.MAX_MINUTES_PER_DAY - currentMinutes;
@@ -85,12 +91,12 @@ export class StudyLoadCalculator {
 
         load.tasks.push(task);
 
-        remaining -= finalAssign;
-        if (remaining <= 0) break;
+        remainingMinutes -= finalAssign;
+        if (remainingMinutes <= 0) break;
       }
 
-      if (remaining > 0) {
-        overflow.push({ task, missingMinutes: remaining });
+      if (remainingMinutes > 0) {
+        overflow.push({ task, missingMinutes: remainingMinutes });
       }
     }
 
