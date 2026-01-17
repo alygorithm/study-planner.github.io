@@ -29,7 +29,6 @@ export class PlannerPage implements OnInit {
 
   activeTab = 'planner';
 
-  // necessario per usare StudyHoursCalculator nel template
   public StudyHoursCalculator = StudyHoursCalculator;
 
   constructor(
@@ -43,7 +42,6 @@ export class PlannerPage implements OnInit {
     this.fetchTasks();
   }
 
-  // Genera una lista di 30 giorni a partire da oggi
   generateDays() {
     const today = new Date();
     this.days = [];
@@ -64,21 +62,11 @@ export class PlannerPage implements OnInit {
     this.selectedDay = day;
   }
 
-<<<<<<< HEAD
   studyOverflow: { task: Task; missingMinutes: number }[] = [];
 
-  // Calcola la distribuzione dello studio per i task non completati
   updateStudyLoad() {
     const pendingTasks: Task[] = [];
 
-=======
-  // ---------------- STUDY LOAD ----------------
-
-  updateStudyLoad() {
-    const pendingTasks: Task[] = [];
-
-    // ❌ senza flat()
->>>>>>> 87382aa (fixed study load distribution and update stats calculations)
     Object.values(this.tasks).forEach(arr => {
       arr.forEach(t => {
         if (!t.completed) pendingTasks.push(t);
@@ -86,14 +74,10 @@ export class PlannerPage implements OnInit {
     });
 
     const dates = this.days.map(d => d.date);
-<<<<<<< HEAD
     const result = StudyLoadCalculator.distributeLoad(pendingTasks, dates);
 
     this.studyLoadMap = result.loadMap;
     this.studyOverflow = result.overflow;
-=======
-    this.studyLoadMap = StudyLoadCalculator.distributeLoad(pendingTasks, dates);
->>>>>>> 87382aa (fixed study load distribution and update stats calculations)
   }
 
   getSelectedDayStudyLoad(): DailyStudyLoad | null {
@@ -101,7 +85,6 @@ export class PlannerPage implements OnInit {
     return this.studyLoadMap[this.selectedDay.date.toDateString()] ?? null;
   }
 
-  // Restituisce un messaggio descrittivo per il carico di studio del giorno selezionato
   getSelectedDayStudyMessage(): string {
     const load = this.getSelectedDayStudyLoad();
     if (!load || (load.hours === 0 && load.minutes === 0)) {
@@ -112,7 +95,6 @@ export class PlannerPage implements OnInit {
     return `Sono previste ${load.hours} ore e ${load.minutes} minuti di studio`;
   }
 
-  // Restituisce le task del giorno selezionato (prime quelle non completate)
   getTasksForSelectedDay(): Task[] {
     const key = this.selectedDay.date.toDateString();
     const dayTasks = this.tasks[key] || [];
@@ -122,11 +104,10 @@ export class PlannerPage implements OnInit {
     ];
   }
 
-  // Apre il modal per aggiungere una nuova task
   async openAddTaskModal() {
     const modal = await this.modalCtrl.create({
       component: AddTaskModal,
-      componentProps: { day: this.selectedDay.date.toISOString() } // <-- CORRETTO
+      componentProps: { day: this.selectedDay.date.toISOString() }
     });
 
     modal.onDidDismiss().then(res => {
@@ -136,7 +117,6 @@ export class PlannerPage implements OnInit {
     await modal.present();
   }
 
-  // Apre il modal con i dettagli di una task (per modificare o eliminare)
   async openTaskDetails(task: Task) {
     const modal = await this.modalCtrl.create({
       component: TaskDetailsModal,
@@ -157,7 +137,6 @@ export class PlannerPage implements OnInit {
     await modal.present();
   }
 
-  // Carica le task dal backend e aggiorna il carico di studio
   fetchTasks() {
     this.taskService.getTasks().subscribe(tasks => {
       this.tasks = {};
@@ -203,7 +182,6 @@ export class PlannerPage implements OnInit {
     return StudyHoursCalculator.calculateTaskMinutes(task);
   }
 
-  // Naviga tra le pagine dell'app (planner / focus / ecc.)
   navigate(page: string) {
     this.activeTab = page;
     this.router.navigate([`/${page}`]);

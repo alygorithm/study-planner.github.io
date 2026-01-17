@@ -1,105 +1,92 @@
-import { Task } from "../task.model";
-import { StudyHoursCalculator } from "../hours.calculator";
+import { Component, Input } from '@angular/core';
+import { IonicModule, ModalController } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
+import { Task } from '../task.model';
 
-export interface DailyStudyLoad {
-  date: Date;
-  hours: number;
-  minutes: number;
-  tasks: Task[];
-  assignedMinutes: number;
-}
+@Component({
+  selector: 'app-task-details-modal',
+  standalone: true,
+  imports: [IonicModule, CommonModule],
+  template: `
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Dettagli Task</ion-title>
 
-export class StudyLoadCalculator {
+        <ion-buttons slot="end">
+          <ion-button class="close-btn" (click)="close()">✕</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
 
-  private static MAX_MINUTES_PER_DAY = 240;
-  private static MIN_MINUTES_PER_DAY = 30;
+    <ion-content>
+      <div class="task-details-card"
+           [ngClass]="{ completed: isCompleting, deleting: isDeleting }">
+        <h2>{{ task.title }}</h2>
 
-  private static toLocalDate(dateStr: string): Date {
-    const d = new Date(dateStr);
-    d.setHours(0, 0, 0, 0);
-    return d;
+        <p *ngIf="task.description">
+          <b>Descrizione: </b><br>
+          {{ task.description }}
+        </p>
+
+        <p *ngIf="task.subject || task.time">
+          <b>Materia: </b><span class="task-meta">
+            {{ task.subject }}
+            <span *ngIf="task.time">- ore {{ task.time }}</span>
+          </span>
+        </p>
+
+        <p *ngIf="task.priority">
+          <b>Priorità: </b> {{ task.priority | titlecase }}
+        </p>
+
+        <div class="task-buttons">
+          <ion-button expand="block" class="complete-btn"
+                      (click)="completeTask()"
+                      [disabled]="isCompleting || isDeleting">
+            Completa Task
+          </ion-button>
+
+          <ion-button expand="block" class="delete-btn"
+                      (click)="deleteTask()"
+                      [disabled]="isCompleting || isDeleting">
+            Elimina Task
+          </ion-button>
+        </div>
+      </div>
+    </ion-content>
+  `,
+  styleUrls: ['./task-details.modal.scss']
+})
+export class TaskDetailsModal {
+  @Input() task!: Task;
+
+  isCompleting = false;
+  isDeleting = false;
+
+  constructor(private modalCtrl: ModalController){}
+
+  completeTask() {
+    if (this.isCompleting || this.isDeleting) return;
+    this.isCompleting = true;
+
+    const card = document.querySelector('.task-details-card');
+    if (card) card.classList.add('completed');
+
+    setTimeout(() => {
+      this.modalCtrl.dismiss({ action: 'complete', task: this.task });
+    }, 250);
   }
 
-  static distributeLoad(
-    tasks: Task[],
-    days: Date[]
-  ): { loadMap: { [key: string]: DailyStudyLoad }; overflow: { task: Task; missingMinutes: number }[] } {
+  deleteTask() {
+    if (this.isDeleting || this.isCompleting) return;
+    this.isDeleting = true;
 
-    const loadMap: { [key: string]: DailyStudyLoad } = {};
-    const overflow: { task: Task; missingMinutes: number }[] = [];
+    setTimeout(() => {
+      this.modalCtrl.dismiss({ action: 'delete', task: this.task });
+    }, 400);
+  }
 
-    // inizializza i giorni
-    days.forEach(day => {
-      const d = new Date(day);
-      d.setHours(0,0,0,0);
-      loadMap[d.toDateString()] = {
-        date: d,
-        hours: 0,
-        minutes: 0,
-        tasks: [],
-        assignedMinutes: 0
-      };
-    });
-
-    const sortedTasks = [...tasks].sort(
-      (a, b) => this.toLocalDate(a.day).getTime() - this.toLocalDate(b.day).getTime()
-    );
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    for (const task of sortedTasks) {
-      const totalMinutes = StudyHoursCalculator.calculateTaskMinutes(task);
-      const deadline = this.toLocalDate(task.day);
-
-      let remainingMinutes = totalMinutes;
-
-      const taskDay = new Date(task.day);
-      taskDay.setHours(0, 0, 0, 0);
-
-      const endDay = taskDay < today ? today : taskDay;
-
-      const relevantDays = days
-        .map(d => this.toLocalDate(d.toISOString()))
-        .filter(d => d.getTime() <= endDay.getTime())
-        .sort((a,b) => b.getTime() - a.getTime());
-
-      if (relevantDays.length === 0) {
-        overflow.push({ task, missingMinutes: totalMinutes });
-        continue;
-      }
-
-      for (let i = 0; i < relevantDays.length; i++) {
-        const day = relevantDays[i];
-        const key = day.toDateString();
-        const load = loadMap[key];
-
-        const currentMinutes = load.assignedMinutes;
-        if (currentMinutes >= this.MAX_MINUTES_PER_DAY) continue;
-
-        let assign = Math.floor(totalMinutes / relevantDays.length) + (i < (totalMinutes % relevantDays.length) ? 1 : 0);
-        if (assign < this.MIN_MINUTES_PER_DAY) assign = this.MIN_MINUTES_PER_DAY;
-
-        const available = this.MAX_MINUTES_PER_DAY - currentMinutes;
-        const finalAssign = Math.min(available, assign);
-
-        if (finalAssign <= 0) continue;
-
-        load.assignedMinutes += finalAssign;
-        load.hours = Math.floor(load.assignedMinutes / 60);
-        load.minutes = load.assignedMinutes % 60;
-
-        load.tasks.push(task);
-
-        remainingMinutes -= finalAssign;
-        if (remainingMinutes <= 0) break;
-      }
-
-      if (remainingMinutes > 0) {
-        overflow.push({ task, missingMinutes: remainingMinutes });
-      }
-    }
-
-    return { loadMap, overflow };
+  close() {
+    this.modalCtrl.dismiss();
   }
 }
