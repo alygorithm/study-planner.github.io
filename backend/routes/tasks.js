@@ -21,7 +21,8 @@ router.post('/', async (req, res) => {
     subject: req.body.subject,
     priority: req.body.priority,
     duration: req.body.duration,
-    day: req.body.day
+    day: req.body.day,
+    completedAt: req.body.completedAt // <-- aggiunta
   });
 
   try {
@@ -57,6 +58,7 @@ router.put('/:id', async (req, res) => {
     task.duration = req.body.duration ?? task.duration;
     task.day = req.body.day ?? task.day;
     task.completed = req.body.completed ?? task.completed;
+    task.completedAt = req.body.completedAt ?? task.completedAt; // <-- aggiunta
 
     const updatedTask = await task.save();
     res.json(updatedTask);

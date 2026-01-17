@@ -34,6 +34,9 @@ export class StatsPage implements OnInit {
   totalTasks = 0;
   completionPercent = 0;
 
+  completedMinutesTotal = 0;
+  completedMinutesToday = 0;
+
   weekStats: DayStat[] = [];
 
   constructor(
@@ -86,10 +89,25 @@ export class StatsPage implements OnInit {
         this.completionPercent = this.totalTasks
           ? Math.round((this.completedTasks / this.totalTasks) * 100)
           : 0;
+
+        const today = new Date().toDateString();
+
+        this.completedMinutesTotal = tasks
+          .filter(t => t.completed && t.completedAt)
+          .reduce((sum, t) => sum + (t.duration || 0), 0);
+
+        this.completedMinutesToday = tasks
+          .filter(t => t.completed && t.completedAt)
+          .filter(t => new Date(t.completedAt!).toDateString() === today)
+          .reduce((sum, t) => sum + (t.duration || 0), 0);
+
+        this.calculateWeekStats();
       },
       error: err => console.error('Errore caricamento tasks:', err)
     });
   }
+
+
 
   private calculateWeekStats() {
     const weekDays = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
@@ -101,9 +119,10 @@ export class StatsPage implements OnInit {
       const day = new Date(startOfWeek);
       day.setDate(startOfWeek.getDate() + index);
 
-      const minutes = this.focusSessions
-        .filter(s => new Date(s.day || '').toDateString() === day.toDateString())
-        .reduce((sum, s) => sum + s.minutes, 0);
+      const minutes = this.tasks
+        .filter(t => t.completed && t.completedAt)
+        .filter(t => new Date(t.completedAt!).toDateString() === day.toDateString())
+        .reduce((sum, t) => sum + (t.duration || 0), 0);
 
       return {
         label,
@@ -112,4 +131,5 @@ export class StatsPage implements OnInit {
       };
     });
   }
+
 }

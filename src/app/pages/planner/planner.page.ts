@@ -147,6 +147,7 @@ export class PlannerPage implements OnInit {
       if (result.data.action === 'delete') this.deleteTaskFromBackend(task);
       if (result.data.action === 'complete') {
         task.completed = true;
+        task.completedAt = new Date();
         this.updateTaskOnBackend(task);
       }
     });

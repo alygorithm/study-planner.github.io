@@ -8,7 +8,8 @@ const taskSchema = new mongoose.Schema({
   priority: { type: String },
   duration: { type: Number },
   day: { type: Date, required: true },
-  completed: { type: Boolean, default: false }
+  completed: { type: Boolean, default: false },
+  completedAt: { type: Date, default: null}
 });
 
 module.exports = mongoose.model('Task', taskSchema);

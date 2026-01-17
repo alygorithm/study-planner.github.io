@@ -9,4 +9,5 @@ export interface Task {
   duration?: number;
   day: Date;
   completed?: boolean;
+  completedAt?: Date;
 }
