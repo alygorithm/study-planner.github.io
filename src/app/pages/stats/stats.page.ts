@@ -83,22 +83,26 @@ export class StatsPage implements OnInit {
   loadTasks() {
     this.taskService.getTasks().subscribe({
       next: tasks => {
-        this.tasks = tasks;
-        this.totalTasks = tasks.length;
-        this.completedTasks = tasks.filter(t => t.completed).length;
+        this.tasks = tasks.map(t => ({
+          ...t,
+          completedAt: t.completedAt ? new Date(t.completedAt) : null
+        }));
+
+        this.totalTasks = this.tasks.length;
+        this.completedTasks = this.tasks.filter(t => t.completed).length;
         this.completionPercent = this.totalTasks
           ? Math.round((this.completedTasks / this.totalTasks) * 100)
           : 0;
 
         const today = new Date().toDateString();
 
-        this.completedMinutesTotal = tasks
+        this.completedMinutesTotal = this.tasks
           .filter(t => t.completed && t.completedAt)
           .reduce((sum, t) => sum + (t.duration || 0), 0);
 
-        this.completedMinutesToday = tasks
+        this.completedMinutesToday = this.tasks
           .filter(t => t.completed && t.completedAt)
-          .filter(t => new Date(t.completedAt!).toDateString() === today)
+          .filter(t => t.completedAt && t.completedAt.toDateString() === today)
           .reduce((sum, t) => sum + (t.duration || 0), 0);
 
         this.calculateWeekStats();
@@ -106,7 +110,6 @@ export class StatsPage implements OnInit {
       error: err => console.error('Errore caricamento tasks:', err)
     });
   }
-
 
 
   private calculateWeekStats() {
@@ -121,7 +124,7 @@ export class StatsPage implements OnInit {
 
       const minutes = this.tasks
         .filter(t => t.completed && t.completedAt)
-        .filter(t => new Date(t.completedAt!).toDateString() === day.toDateString())
+        .filter(t => t.completedAt && t.completedAt.toDateString() === day.toDateString())
         .reduce((sum, t) => sum + (t.duration || 0), 0);
 
       return {
@@ -131,5 +134,4 @@ export class StatsPage implements OnInit {
       };
     });
   }
-
 }

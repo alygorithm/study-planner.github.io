@@ -177,6 +177,7 @@ export class PlannerPage implements OnInit {
       if (!this.tasks[key]) this.tasks[key] = [];
       this.tasks[key].push(newTask);
       this.updateStudyLoad();
+
     });
   }
 

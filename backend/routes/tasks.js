@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
     priority: req.body.priority,
     duration: req.body.duration,
     day: req.body.day,
-    completedAt: req.body.completedAt // <-- aggiunta
+    completedAt: req.body.completedAt
   });
 
   try {
