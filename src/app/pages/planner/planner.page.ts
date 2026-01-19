@@ -10,6 +10,7 @@ import { TaskService } from './task.service';
 import { Task } from './task.model';
 
 import { StudyLoadCalculator, DailyStudyLoad } from './study-load.calculator';
+import { StudyHoursCalculator } from './hours.calculator';
 
 @Component({
   selector: 'app-planner',
@@ -28,6 +29,9 @@ export class PlannerPage implements OnInit {
 
   activeTab = 'planner';
 
+  // necessario per usare StudyHoursCalculator nel template
+  public StudyHoursCalculator = StudyHoursCalculator;
+
   constructor(
     private router: Router,
     private modalCtrl: ModalController,
@@ -38,8 +42,6 @@ export class PlannerPage implements OnInit {
     this.generateDays();
     this.fetchTasks();
   }
-
-  // ---------------- GIORNI ----------------
 
   generateDays() {
     const today = new Date();
@@ -57,21 +59,26 @@ export class PlannerPage implements OnInit {
     this.selectedDay = this.days.find(d => d.isToday)!;
   }
 
-  selectDay(day: { date: Date; isToday: boolean }) {
+  selectDay(day: any) {
     this.selectedDay = day;
   }
 
-
-  // ---------------- STUDY LOAD ----------------
+  studyOverflow: { task: Task; missingMinutes: number }[] = [];
 
   updateStudyLoad() {
     const pendingTasks: Task[] = [];
 
-    Object.values(this.tasks).forEach((dayTasks: Task[]) => {
-      dayTasks.forEach((t: Task) => {
+    Object.values(this.tasks).forEach(arr => {
+      arr.forEach(t => {
         if (!t.completed) pendingTasks.push(t);
       });
     });
+
+    const dates = this.days.map(d => d.date);
+    const result = StudyLoadCalculator.distributeLoad(pendingTasks, dates);
+
+    this.studyLoadMap = result.loadMap;
+    this.studyOverflow = result.overflow;
   }
 
   getSelectedDayStudyLoad(): DailyStudyLoad | null {
@@ -88,8 +95,6 @@ export class PlannerPage implements OnInit {
     if (load.hours === 0) return `Sono previsti ${load.minutes} minuti di studio`;
     return `Sono previste ${load.hours} ore e ${load.minutes} minuti di studio`;
   }
-
-  // ---------------- TASK ----------------
 
   getTasksForSelectedDay(): Task[] {
     const key = this.selectedDay.date.toDateString();
@@ -133,8 +138,6 @@ export class PlannerPage implements OnInit {
     await modal.present();
   }
 
-  // ---------------- BACKEND ----------------
-
   fetchTasks() {
     this.taskService.getTasks().subscribe(tasks => {
       this.tasks = {};
@@ -174,6 +177,10 @@ export class PlannerPage implements OnInit {
       );
       this.updateStudyLoad();
     });
+  }
+
+  getTaskMinutes(task: Task): number {
+    return StudyHoursCalculator.calculateTaskMinutes(task);
   }
 
   navigate(page: string) {

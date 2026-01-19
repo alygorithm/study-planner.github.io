@@ -6,7 +6,6 @@
 
 <ion-content class="ion-padding">
 
-  <!-- Calendario orizzontale -->
   <div class="calendar-container">
     <div class="day"
          *ngFor="let day of days"
@@ -17,13 +16,21 @@
     </div>
   </div>
 
-  <!-- Messaggio ore e minuti -->
   <div class="study-load" *ngIf="getSelectedDayStudyLoad() as load">
     <p>{{ getSelectedDayStudyMessage() }}</p>
     <small>{{ load.tasks.length }} task contribuiscono a questo carico</small>
+    <div *ngIf="getSelectedDayStudyLoad() as load">
+    <div *ngIf="load.tasks.length > 0" class="load-details">
+        <div *ngFor="let item of load.tasks">
+          <strong>{{ item.title }}</strong>
+          <span> - {{ getTaskMinutes(item) }} min</span>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Task del giorno selezionato -->
+
+
   <div class="tasks-container" *ngIf="selectedDay">
     <h3>Task del {{ selectedDay.date | date:'fullDate' }}</h3>
     <p *ngIf="getTasksForSelectedDay().length === 0">
@@ -45,14 +52,12 @@
     </ion-item>
   </div>
 
-  <!-- Pulsante per aprire modale -->
   <ion-button expand="full" class="ion-margin add-task-btn" (click)="openAddTaskModal()">
     + Aggiungi Task
   </ion-button>
 
 </ion-content>
 
-<!-- Barra di navigazione -->
 <ion-footer>
   <ion-toolbar>
     <ion-grid>
