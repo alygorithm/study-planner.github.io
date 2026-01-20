@@ -15,9 +15,20 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+// Logging semplice per debug
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
+
 // Rotta di controllo (health check / homepage)
 app.get('/', (req, res) => {
   res.status(200).send('Backend MyStudyPlanner attivo');
+});
+
+// Rotta di test
+app.get('/ping', (req, res) => {
+  res.status(200).send('pong');
 });
 
 // Connessione a MongoDB
