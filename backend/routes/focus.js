@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const FocusSession = require('../models/focusTemp'); // corretto
 
-// GET tutte le sessioni
+// GET: tutte le sessioni
 router.get('/', async (req, res) => {
   try {
     const sessions = await FocusSession.find(); // <-- qui
@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST nuova sessione
+// POST: nuova sessione
 router.post('/', async (req, res) => {
   const session = new FocusSession({        // <-- qui
     subject: req.body.subject,
@@ -28,5 +28,18 @@ router.post('/', async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
+
+// DELETE: cancella una focus session per id
+router.delete('/:id', async (req, res) => {
+  try {
+    const deletedSession = await FocusSession.findByIdAndDelete(req.params.id);
+    if(!deletedSession) {
+      return res.status(404).json({message: 'Focus session non trovata'});
+    }
+    res.json({message: 'Focus session cancellata'});
+  } catch (err) {
+    res.status(500).json({message: err.message});
+  }
+})
 
 module.exports = router;

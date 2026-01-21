@@ -64,12 +64,21 @@ export class PlannerPage implements OnInit {
     this.selectedDay = day;
   }
 
+<<<<<<< HEAD
   studyOverflow: { task: Task; missingMinutes: number }[] = [];
 
   // Calcola la distribuzione dello studio per i task non completati
   updateStudyLoad() {
     const pendingTasks: Task[] = [];
 
+=======
+  // ---------------- STUDY LOAD ----------------
+
+  updateStudyLoad() {
+    const pendingTasks: Task[] = [];
+
+    // ❌ senza flat()
+>>>>>>> 87382aa (fixed study load distribution and update stats calculations)
     Object.values(this.tasks).forEach(arr => {
       arr.forEach(t => {
         if (!t.completed) pendingTasks.push(t);
@@ -77,10 +86,14 @@ export class PlannerPage implements OnInit {
     });
 
     const dates = this.days.map(d => d.date);
+<<<<<<< HEAD
     const result = StudyLoadCalculator.distributeLoad(pendingTasks, dates);
 
     this.studyLoadMap = result.loadMap;
     this.studyOverflow = result.overflow;
+=======
+    this.studyLoadMap = StudyLoadCalculator.distributeLoad(pendingTasks, dates);
+>>>>>>> 87382aa (fixed study load distribution and update stats calculations)
   }
 
   getSelectedDayStudyLoad(): DailyStudyLoad | null {

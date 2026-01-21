@@ -46,10 +46,7 @@ export class StudyLoadCalculator {
 
     for (const task of sortedTasks) {
       const totalMinutes = StudyHoursCalculator.calculateTaskMinutes(task);
-
       const deadline = this.toLocalDate(task.day);
-      const today = new Date();
-      today.setHours(0,0,0,0);
 
       const relevantDays = days
         .map(d => this.toLocalDate(d.toISOString()))
@@ -86,7 +83,6 @@ export class StudyLoadCalculator {
         load.hours = Math.floor(load.assignedMinutes / 60);
         load.minutes = load.assignedMinutes % 60;
 
-        // Aggiungi la task solo se ha minuti assegnati a questo giorno
         load.tasks.push(task);
 
         remaining -= finalAssign;
